@@ -1,14 +1,12 @@
 const express = require("express");
 const expressConfig = require("./config/express");
 const initDataBase = require("./config/database");
+const router = require("./router");
 
 const app = express();
 expressConfig(app);
 
-
-app.get("/", (req, res) => {
-    res.send("hello world");
-});
+app.use(router)
 
 try {
     initDataBase()
