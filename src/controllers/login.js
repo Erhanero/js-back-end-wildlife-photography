@@ -13,8 +13,13 @@ router.post("/login", async (req, res) => {
 
     } catch (err) {
         console.log(err.message);
-        res.render("/login");
+        res.render("login");
     }
 });
+
+router.get("/logout", (req, res) => {
+    res.clearCookie("app-token");
+    res.redirect("/")
+})
 
 module.exports = router;
