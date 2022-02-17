@@ -1,12 +1,14 @@
 const router = require("express").Router();
 const authService = require("../services/auth");
 const jwt = require("jsonwebtoken");
+const mapErrors = require("../utils/mapErrors");
+const { isGuest } = require("../middlewares/guards");
 
-router.get("/register", (req, res) => {
+router.get("/register", isGuest, (req, res) => {
     res.render("register");
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", isGuest, async (req, res) => {
 
     try {
         if (req.body.password != req.body.repeatPassword) {
@@ -18,8 +20,8 @@ router.post("/register", async (req, res) => {
         res.redirect("/");
 
     } catch (err) {
-        console.log(err.message);
-        res.render("register");
+        const errors = mapErrors(err);
+        res.render("register", { errors });
     }
 })
 

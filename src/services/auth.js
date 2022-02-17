@@ -9,7 +9,7 @@ async function register({ firstName, lastName, email, password }) {
     const existing = await User.findOne({ email });
 
     if (existing) {
-        throw new Error("Email is taken");
+        throw new Error("Email is taken!");
     }
 
     const user = await User.create({ firstName, lastName, email, hashedPassword });

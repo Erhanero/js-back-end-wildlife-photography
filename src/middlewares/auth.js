@@ -14,8 +14,7 @@ function authMiddleware(req, res, next) {
             res.status(401).render("404");
         }
     }
-    console.log(res.locals.user);
-    console.log(req.user);
+
     next()
 }
 
