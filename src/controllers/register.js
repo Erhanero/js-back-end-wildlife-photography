@@ -11,7 +11,10 @@ router.get("/register", isGuest, (req, res) => {
 router.post("/register", isGuest, async (req, res) => {
 
     try {
-        if (req.body.password != req.body.repeatPassword) {
+        if (req.body.password.trim() == "") {
+            throw new Error("Password is required")
+
+        } else if (req.body.password != req.body.repeatPassword) {
             throw new Error("Passwords don't match!")
         }
         const token = await authService.register(req.body);
@@ -21,7 +24,7 @@ router.post("/register", isGuest, async (req, res) => {
 
     } catch (err) {
         const errors = mapErrors(err);
-        res.render("register", { errors });
+        res.render("register", { data: req.body, errors });
     }
 })
 

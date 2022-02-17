@@ -7,4 +7,7 @@ router.use(homeController);
 router.use(registerController);
 router.use(loginController);
 
+router.get("*", (req, res) => {
+    res.render("404")
+})
 module.exports = router;
