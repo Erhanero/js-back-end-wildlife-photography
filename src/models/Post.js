@@ -53,7 +53,7 @@ const postSchema = new mongoose.Schema({
     ],
     rating: {
         type: Number,
-        deault: 0
+        default: 0
     }
 
 });
