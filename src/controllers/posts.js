@@ -33,10 +33,14 @@ router.get("/allPosts", async (req, res) => {
 });
 
 router.get("/details/:postId", async (req, res) => {
+
     let post = await postService.getPostById(req.params.postId);
     const isAuthor = req.user && post.author._id == req.user._id;
+    const isVoted = req.user && postService.isVoted(post, req.user);
+    const allVoteUsers = req.user && postService.voteUsers(post);
+
     post = post.toObject();
-    res.render("details", { post, isAuthor });
+    res.render("details", { post, isAuthor, isVoted, allVoteUsers });
 });
 
 router.get("/delete/:postId", isUser, async (req, res) => {
@@ -58,14 +62,23 @@ router.post("/edit/:postId", isUser, async (req, res) => {
 
 });
 
-router.get("/up-vote/:postId", async (req, res) => {
-    const post = await postService.getPostById(req.params.postId);
-    post.votes.push(req.user._id);
-    post.rating += 1;
+router.get("/up-vote/:postId", isUser, async (req, res) => {
+    await postService.upVote(req.params.postId, req.user);
 
-    console.log(post);
-    res.redirect(`/details/${req.params.postId}`)
+    res.redirect(`/details/${req.params.postId}`);
 
+});
+
+router.get("/down-vote/:postId", isUser, async (req, res) => {
+    await postService.downVote(req.params.postId, req.user);
+
+    res.redirect(`/details/${req.params.postId}`);
+});
+
+router.get("/my-posts", isUser, async (req, res) => {
+    const myPosts = await postService.myPosts(req.user._id);
+    console.log(myPosts)
+    res.render("my-posts", { myPosts })
 })
 
 module.exports = router;
